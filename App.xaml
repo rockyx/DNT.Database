@@ -1,0 +1,11 @@
+﻿<Application x:Class="DNT.Database.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:db="clr-namespace:DNT.Database"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <db:CommandConverter x:Key="commandConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -72,13 +72,11 @@ ipch/
 *.ncb
 *.opensdf
 *.sdf
+*.vcxproj.*
 
 # Visual Studio profiler
 *.psess
 *.vsp
-*.vcxproj
-*.vcxproj.*
-*.csproj
 
 # ReSharper is a .NET coding add-in
 _ReSharper*

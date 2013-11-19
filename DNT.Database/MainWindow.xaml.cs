@@ -17,6 +17,7 @@ using System.Data.SQLite;
 using System.Data.SqlClient;
 using System.Data.Common;
 using System.Security.Cryptography;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using System.IO;
@@ -144,7 +145,11 @@ namespace DNT.Database
 
             // Return the encrypted bytes from the memory stream.
             int length = plainBytes.Length;
-            int times = length / 16 + 1;
+            int times = 0;
+            if ((length % 16) == 0)
+                times = length / 16;
+            else
+                times = length / 16 + 1;
             int size = times * 16;
             byte[] encrypted = new byte[size];
             Encrypt(plainBytes, (uint)plainBytes.Length, encrypted);
@@ -153,10 +158,11 @@ namespace DNT.Database
 
         private byte[] EncryptStringToBytes(string plainText)
         {
-            List<byte> textUTF8 = new List<byte>();
+            //List<byte> textUTF8 = new List<byte>();
             byte[] plainBuff = UTF8Encoding.UTF8.GetBytes(plainText);
-            textUTF8.AddRange(plainBuff);
-            byte[] encrypt = EncryptBytesToBytes(textUTF8.ToArray());
+            //textUTF8.AddRange(plainBuff);
+            //byte[] encrypt = EncryptBytesToBytes(textUTF8.ToArray());
+            byte[] encrypt = EncryptBytesToBytes(plainBuff);
             return encrypt;
         }
 
@@ -298,9 +304,13 @@ namespace DNT.Database
                     var result = queryText.ExecuteReader();
                     while (result.Read())
                     {
+                        Trace.WriteLine(result.GetFieldValue<int>(0));
                         insertText.Parameters[0].Value = result.GetFieldValue<int>(0);
+                        Trace.WriteLine(result.GetFieldValue<string>(1));
                         insertText.Parameters[1].Value = EncryptStringToBytes(result.GetFieldValue<string>(1));
+                        Trace.WriteLine(result.GetFieldValue<string>(2));
                         insertText.Parameters[2].Value = EncryptStringToBytes(result.GetFieldValue<string>(2));
+                        Trace.WriteLine(result.GetFieldValue<string>(3));
                         insertText.Parameters[3].Value = EncryptStringToBytes(result.GetFieldValue<string>(3));
                         insertText.ExecuteNonQuery();
                     }
